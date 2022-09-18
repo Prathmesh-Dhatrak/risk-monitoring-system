@@ -16,10 +16,10 @@ const LocalStrategy = passportLocal.Strategy
 dotenv.config();
 
 
-mongoose.connect(`mongodb+srv://admin:admin@cluster0.fuojw0c.mongodb.net/risk-monitoring-DB?retryWrites=true&w=majority`, {
+mongoose.connect(`mongodb+srv://admin:admin@cluster0.fuojw0c.mongodb.net/risk-monitoring-DB?retryWrites=true&w=majority&keepAlive=true&poolSize=30&autoReconnect=true&socketTimeoutMS=360000&connectTimeoutMS=360000`, {
   useCreateIndex: true,
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 }, (err) => {
   if (err) throw err;
   console.log("Connected To Mongo")
@@ -71,32 +71,32 @@ passport.deserializeUser((id: string, cb) => {
   });
 });
 
-(async () => {
-  await fetch("https://api.thingspeak.com/channels/1683188/feeds.json")
-    .then((response : any) => response.json())
-    .then(async (data : any) => {
-      // console.log(data.channel.name);
-      const obj = {
-        kitId: data.channel.id,
-        title: data.channel.name,
-        description: data.channel.description,
-        isActive: true,
-        feeds: data.feeds,
-      };
-      // console.log(data.channel.id);
+// (async () => {
+//   await fetch("https://api.thingspeak.com/channels/1683188/feeds.json")
+//     .then((response : any) => response.json())
+//     .then(async (data : any) => {
+//       // console.log(data.channel.name);
+//       const obj = {
+//         kitId: data.channel.id,
+//         title: data.channel.name,
+//         description: data.channel.description,
+//         isActive: true,
+//         feeds: data.feeds,
+//       };
+//       // console.log(data.channel.id);
 
-      const para = await monitorKit.findOne(data.channel.id);
-      // console.log(para);
-      if (para === true) {
-        console.log("Data is already present updating the data");
-         monitorKit.update(obj);
-      } else if(para === false) {
-        console.log("Data is not present creating new data");
-         monitorKit.create(obj);
-      }
-    })
-    .catch((err : any) => console.log(`Error: ${err}`));
-})();
+//       const para = await monitorKit.findOne(data.channel.id);
+//       // console.log(para);
+//       if (para === true) {
+//         console.log("Data is already present updating the data");
+//          monitorKit.update(obj);
+//       } else if(para === false) {
+//         console.log("Data is not present creating new data");
+//          monitorKit.create(obj);
+//       }
+//     })
+//     .catch((err : any) => console.log(`Error: ${err}`));
+// })();
 
 
 
