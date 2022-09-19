@@ -16,7 +16,7 @@ const LocalStrategy = passportLocal.Strategy
 dotenv.config();
 
 
-mongoose.connect(`mongodb+srv://admin:admin@cluster0.fuojw0c.mongodb.net/risk-monitoring-DB?retryWrites=true&w=majority&keepAlive=true&poolSize=30&autoReconnect=true&socketTimeoutMS=360000&connectTimeoutMS=360000`, {
+mongoose.connect(`link`, {
   useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
